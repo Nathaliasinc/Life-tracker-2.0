@@ -164,6 +164,39 @@ git add life-tracker-extension/Resources/
 git commit -m "Re-add extension resources"
 ```
 
+## 📤 **Ready to Push to GitHub for Xcode Cloud**
+
+Your local repository is now ready! Follow these exact steps:
+
+### 1. Create GitHub Repository
+- Go to [github.com](https://github.com) and create a new repository
+- Name: `life-tracker-extension` or `daily-planner` 
+- Visibility: **Public** (required for free Xcode Cloud)
+- Don't initialize with README
+
+### 2. Add Remote and Push
+```bash
+# Replace YOURUSERNAME with your actual GitHub username
+git remote add origin https://github.com/YOURUSERNAME/life-tracker-extension.git
+
+# Push everything to GitHub
+git push -u origin main
+```
+
+### 3. Verify Upload
+After pushing, check that these files are in your GitHub repository:
+- ✅ `life-tracker-extension/Resources/Icon.png`
+- ✅ `life-tracker-extension/Resources/icons/` (with all PNG files)
+- ✅ `life-tracker-extension/Resources/manifest.json`
+- ✅ All other extension files
+
+### 4. Set Up Xcode Cloud
+1. Go to [App Store Connect](https://appstoreconnect.apple.com)
+2. Create new app or go to existing app
+3. Go to **Xcode Cloud** section
+4. Connect your GitHub repository
+5. Start a build - **it should now succeed!** ✅
+
 ## ✅ **Success Confirmation**
 
 You'll know the fix worked when:
