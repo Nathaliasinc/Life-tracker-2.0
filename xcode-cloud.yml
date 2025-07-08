@@ -1,0 +1,37 @@
+# Xcode Cloud Build Configuration
+# This file tells Xcode Cloud how to build the Life Tracker 2.0 Safari Extension
+
+version: 1
+
+workflows:
+  life-tracker-build:
+    name: "Life Tracker 2.0 Safari Extension"
+    description: "Build Safari Web Extension with auto-generated icons"
+    
+    trigger:
+      branch: "main"
+      
+    steps:
+      - name: "Generate Icons"
+        script: |
+          echo "🔧 Generating required Icon.png file..."
+          
+          # Create Resources directory
+          mkdir -p "Life Tracker 2.0/Resources"
+          
+          # Generate minimal valid PNG file
+          PNG_DATA="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+          echo "$PNG_DATA" | base64 -d > "Life Tracker 2.0/Resources/Icon.png"
+          
+          # Verify creation
+          if [ -f "Life Tracker 2.0/Resources/Icon.png" ]; then
+            echo "✅ Icon.png generated successfully"
+          else
+            echo "❌ Failed to generate Icon.png"
+            exit 1
+          fi
+          
+      - name: "Build Safari Extension"
+        action: "build"
+        platform: "iOS"
+        scheme: "Life Tracker 2.0"
