@@ -1,0 +1,59 @@
+{
+  "manifest_version": 2,
+  "name": "Life Tracker 2.0",
+  "short_name": "LifeTracker",
+  "version": "1.0.0",
+  "description": "A beautiful and interactive life tracker with affirmations, budget tracking, goal planning, and daily organization tools",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "64": "icons/icon-64.png",
+    "72": "icons/icon-72.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png",
+    "144": "icons/icon-144.png",
+    "152": "icons/icon-152.png",
+    "192": "icons/icon-192.png",
+    "256": "icons/icon-256.png",
+    "384": "icons/icon-384.png",
+    "512": "icons/icon-512.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "Life Tracker 2.0",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "background"
+  ],
+  "web_accessible_resources": [
+    "icons/*",
+    "*.js",
+    "*.html",
+    "*.css",
+    "popup.html"
+  ],
+  "homepage_url": "https://your-domain.com/life-tracker/",
+  "author": "Your Name"
+}

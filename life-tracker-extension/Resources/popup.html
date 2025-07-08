@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Tracker 2.0</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            width: 400px;
+            max-height: 600px;
+            overflow: hidden;
+        }
+
+        .extension-container {
+            background: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 60px;
+            padding: 10px 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            color: #6c757d;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab:hover {
+            background: #f1f3f4;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: white;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quick-action {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-1px);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .widget {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .widget h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        .widget-content {
+            font-size: 12px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #495057;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .input-group textarea {
+            height: 60px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+
+        .list-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6c757d;
+            font-size: 11px;
+            padding: 20px;
+        }
+
+        .budget-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .budget-label {
+            font-size: 11px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .budget-amount {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .budget-amount.positive {
+            color: #28a745;
+        }
+
+        .budget-amount.negative {
+            color: #dc3545;
+        }
+
+        .footer {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .footer button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .footer button:hover {
+            transform: translateY(-1px);
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .sparkle {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="extension-container">
+        <div class="header">
+            <h1>🌟 Life Tracker 2.0</h1>
+            <div class="subtitle">Your Personal Life Organizer</div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showSection('home')">🏠 Home</div>
+            <div class="tab" onclick="showSection('tasks')">📝 Tasks</div>
+            <div class="tab" onclick="showSection('budget')">💰 Budget</div>
+            <div class="tab" onclick="showSection('affirmations')">✨ Mind</div>
+            <div class="tab" onclick="showSection('fitness')">💪 Fitness</div>
+            <div class="tab" onclick="showSection('settings')">⚙️ More</div>
+        </div>
+
+        <div class="content">
+            <!-- HOME SECTION -->
+            <div id="home" class="section active">
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="addQuickTask()">
+                        📝 Quick Task
+                    </button>
+                    <button class="quick-action" onclick="addQuickAffirmation()">
+                        ✨ Affirmation
+                    </button>
+                    <button class="quick-action" onclick="addQuickExpense()">
+                        💰 Expense
+                    </button>
+                    <button class="quick-action" onclick="showSection('fitness')">
+                        💪 Workout
+                    </button>
+                </div>
+
+                <div class="widget">
+                    <h3>📅 Today's Schedule</h3>
+                    <div class="widget-content" id="todaySchedule">
+                        No events scheduled for today
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h3>💰 Budget Status</h3>
+                    <div id="budgetWidget" class="budget-display">
+                        <span class="budget-label">Remaining Today:</span>
+                        <span id="remainingAmount" class="budget-amount">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h3>✨ Today's Affirmation</h3>
+                    <div class="widget-content" id="todayAffirmation">
+                        Click "Generate" to get your daily motivation!
+                    </div>
+                    <button class="btn btn-sm" style="margin-top: 8px;" onclick="generateDailyAffirmation()">Generate New</button>
+                </div>
+            </div>
+
+            <!-- TASKS SECTION -->
+            <div id="tasks" class="section">
+                <div class="input-group">
+                    <label for="taskInput">Add New Task</label>
+                    <input type="text" id="taskInput" placeholder="Enter a task..." onkeypress="handleTaskEnter(event)">
+                    <button class="btn" style="margin-top: 5px;" onclick="addTask()">Add Task</button>
+                </div>
+
+                <div id="tasksList">
+                    <div class="empty-state">No tasks yet. Add one above!</div>
+                </div>
+            </div>
+
+            <!-- BUDGET SECTION -->
+            <div id="budget" class="section">
+                <div class="widget">
+                    <h3>💰 Quick Expense</h3>
+                    <div class="input-group">
+                        <label for="expenseDesc">Description</label>
+                        <input type="text" id="expenseDesc" placeholder="Coffee, lunch, etc...">
+                    </div>
+                    <div class="input-group">
+                        <label for="expenseAmount">Amount ($)</label>
+                        <input type="number" id="expenseAmount" placeholder="0.00" step="0.01">
+                    </div>
+                    <button class="btn" onclick="addExpense()">Add Expense</button>
+                </div>
+
+                <div class="widget">
+                    <h3>📊 Recent Expenses</h3>
+                    <div id="expensesList">
+                        <div class="empty-state">No expenses tracked yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AFFIRMATIONS SECTION -->
+            <div id="affirmations" class="section">
+                <div class="widget">
+                    <h3>✨ Generate Affirmation</h3>
+                    <div class="widget-content" id="generatedAffirmation">
+                        Click below to get a positive affirmation
+                    </div>
+                    <button class="btn" style="margin-top: 8px;" onclick="generateAffirmation()">Generate Affirmation</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="customAffirmation">Add Personal Affirmation</label>
+                    <textarea id="customAffirmation" placeholder="Write your own positive affirmation..."></textarea>
+                    <button class="btn" style="margin-top: 5px;" onclick="addCustomAffirmation()">Save Affirmation</button>
+                </div>
+
+                <div id="affirmationsList">
+                    <div class="empty-state">Your affirmations will appear here</div>
+                </div>
+            </div>
+
+            <!-- FITNESS SECTION -->
+            <div id="fitness" class="section">
+                <div class="widget">
+                    <h3>💪 Quick Workout Log</h3>
+                    <div class="input-group">
+                        <label for="exerciseName">Exercise</label>
+                        <input type="text" id="exerciseName" placeholder="Push-ups, Running, etc...">
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <div class="input-group" style="flex: 1;">
+                            <label for="exerciseDuration">Duration (min)</label>
+                            <input type="number" id="exerciseDuration" placeholder="30">
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label for="exerciseReps">Reps/Sets</label>
+                            <input type="text" id="exerciseReps" placeholder="3x10">
+                        </div>
+                    </div>
+                    <button class="btn" onclick="addExercise()">Log Exercise</button>
+                </div>
+
+                <div id="exercisesList">
+                    <div class="empty-state">No exercises logged today</div>
+                </div>
+            </div>
+
+            <!-- SETTINGS SECTION -->
+            <div id="settings" class="section">
+                <div class="widget">
+                    <h3>🔧 Extension Settings</h3>
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" id="notificationsEnabled" onchange="saveSettings()"> 
+                            Enable Notifications
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" id="syncEnabled" onchange="saveSettings()"> 
+                            Sync Data Across Devices
+                        </label>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h3>📊 Data Management</h3>
+                    <button class="btn" onclick="exportData()" style="margin-right: 8px;">Export Data</button>
+                    <button class="btn" onclick="clearAllData()" style="background: #dc3545;">Clear All Data</button>
+                </div>
+
+                <div class="widget">
+                    <h3>ℹ️ About</h3>
+                    <div class="widget-content">
+                        <p><strong>Life Tracker 2.0</strong></p>
+                        <p>Version 1.0.0</p>
+                        <p>Your complete life organization companion</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button onclick="openFullApp()">📱 Open Full App</button>
+        </div>
+    </div>
+
+    <script>
+        // Extension storage interface
+        const storage = {
+            get: (keys) => {
+                return new Promise((resolve) => {
+                    if (chrome && chrome.storage) {
+                        chrome.storage.local.get(keys, resolve);
+                    } else {
+                        // Fallback to localStorage for testing
+                        const result = {};
+                        if (Array.isArray(keys)) {
+                            keys.forEach(key => {
+                                result[key] = JSON.parse(localStorage.getItem(key) || 'null');
+                            });
+                        } else if (typeof keys === 'string') {
+                            result[keys] = JSON.parse(localStorage.getItem(keys) || 'null');
+                        } else {
+                            for (let key in keys) {
+                                result[key] = JSON.parse(localStorage.getItem(key) || JSON.stringify(keys[key]));
+                            }
+                        }
+                        resolve(result);
+                    }
+                });
+            },
+            set: (data) => {
+                return new Promise((resolve) => {
+                    if (chrome && chrome.storage) {
+                        chrome.storage.local.set(data, resolve);
+                    } else {
+                        // Fallback to localStorage for testing
+                        for (let key in data) {
+                            localStorage.setItem(key, JSON.stringify(data[key]));
+                        }
+                        resolve();
+                    }
+                });
+            }
+        };
+
+        // Affirmation templates
+        const affirmationTemplates = [
+            "I am capable of achieving amazing things today.",
+            "Every challenge I face makes me stronger and wiser.",
+            "I choose to focus on what I can control and let go of what I cannot.",
+            "My potential is limitless, and I embrace new opportunities.",
+            "I am grateful for all the abundance in my life.",
+            "I trust in my ability to overcome any obstacle.",
+            "Today is full of possibilities, and I am ready to seize them.",
+            "I radiate positivity and attract good things into my life.",
+            "I am becoming the best version of myself every day.",
+            "My thoughts create my reality, and I choose positive thoughts."
+        ];
+
+        // Initialize the extension
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+            updateBudgetWidget();
+            updateTodaySchedule();
+        });
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load section-specific data
+            loadSectionData(sectionName);
+        }
+
+        function loadSectionData(sectionName) {
+            switch(sectionName) {
+                case 'tasks':
+                    loadTasks();
+                    break;
+                case 'budget':
+                    loadExpenses();
+                    break;
+                case 'affirmations':
+                    loadAffirmations();
+                    break;
+                case 'fitness':
+                    loadExercises();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        function loadAllData() {
+            loadTasks();
+            loadExpenses();
+            loadAffirmations();
+            loadExercises();
+            loadSettings();
+        }
+
+        // Task functions
+        function addQuickTask() {
+            const task = prompt('Enter a quick task:');
+            if (task && task.trim()) {
+                addTaskToList(task.trim());
+            }
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const task = input.value.trim();
+            if (task) {
+                addTaskToList(task);
+                input.value = '';
+            }
+        }
+
+        function addTaskToList(taskText) {
+            storage.get(['tasks']).then(result => {
+                const tasks = result.tasks || [];
+                const newTask = {
+                    id: Date.now(),
+                    text: taskText,
+                    completed: false,
+                    date: new Date().toDateString()
+                };
+                tasks.unshift(newTask);
+                storage.set({tasks: tasks}).then(() => {
+                    loadTasks();
+                    showToast('Task added! 📝');
+                });
+            });
+        }
+
+        function toggleTask(taskId) {
+            storage.get(['tasks']).then(result => {
+                const tasks = result.tasks || [];
+                const task = tasks.find(t => t.id === taskId);
+                if (task) {
+                    task.completed = !task.completed;
+                    storage.set({tasks: tasks}).then(() => {
+                        loadTasks();
+                    });
+                }
+            });
+        }
+
+        function deleteTask(taskId) {
+            storage.get(['tasks']).then(result => {
+                const tasks = result.tasks || [];
+                const filteredTasks = tasks.filter(t => t.id !== taskId);
+                storage.set({tasks: filteredTasks}).then(() => {
+                    loadTasks();
+                    showToast('Task deleted! 🗑️');
+                });
+            });
+        }
+
+        function loadTasks() {
+            storage.get(['tasks']).then(result => {
+                const tasks = result.tasks || [];
+                const today = new Date().toDateString();
+                const todayTasks = tasks.filter(task => task.date === today);
+                
+                const tasksList = document.getElementById('tasksList');
+                if (todayTasks.length === 0) {
+                    tasksList.innerHTML = '<div class="empty-state">No tasks yet. Add one above!</div>';
+                    return;
+                }
+
+                tasksList.innerHTML = todayTasks.map(task => `
+                    <div class="list-item ${task.completed ? 'completed' : ''}">
+                        <span onclick="toggleTask(${task.id})" style="cursor: pointer;">
+                            ${task.completed ? '✅' : '⭕'} ${task.text}
+                        </span>
+                        <button class="btn btn-sm" onclick="deleteTask(${task.id})">🗑️</button>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function handleTaskEnter(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        }
+
+        // Budget functions
+        function addQuickExpense() {
+            const description = prompt('Expense description:');
+            if (description && description.trim()) {
+                const amount = prompt('Amount ($):');
+                if (amount && !isNaN(amount)) {
+                    addExpenseToList(description.trim(), parseFloat(amount));
+                }
+            }
+        }
+
+        function addExpense() {
+            const desc = document.getElementById('expenseDesc').value.trim();
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            
+            if (desc && amount > 0) {
+                addExpenseToList(desc, amount);
+                document.getElementById('expenseDesc').value = '';
+                document.getElementById('expenseAmount').value = '';
+            }
+        }
+
+        function addExpenseToList(description, amount) {
+            storage.get(['expenses']).then(result => {
+                const expenses = result.expenses || [];
+                const newExpense = {
+                    id: Date.now(),
+                    description: description,
+                    amount: amount,
+                    date: new Date().toDateString(),
+                    timestamp: Date.now()
+                };
+                expenses.unshift(newExpense);
+                storage.set({expenses: expenses}).then(() => {
+                    loadExpenses();
+                    updateBudgetWidget();
+                    showToast(`Expense added: $${amount.toFixed(2)} 💰`);
+                });
+            });
+        }
+
+        function loadExpenses() {
+            storage.get(['expenses']).then(result => {
+                const expenses = result.expenses || [];
+                const today = new Date().toDateString();
+                const todayExpenses = expenses.filter(expense => expense.date === today);
+                
+                const expensesList = document.getElementById('expensesList');
+                if (todayExpenses.length === 0) {
+                    expensesList.innerHTML = '<div class="empty-state">No expenses tracked yet</div>';
+                    return;
+                }
+
+                expensesList.innerHTML = todayExpenses.slice(0, 5).map(expense => `
+                    <div class="list-item">
+                        <span>${expense.description}</span>
+                        <span>$${expense.amount.toFixed(2)}</span>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function updateBudgetWidget() {
+            storage.get(['expenses', 'budgetData']).then(result => {
+                const expenses = result.expenses || [];
+                const budgetData = result.budgetData || {};
+                
+                const today = new Date().toDateString();
+                const todayExpenses = expenses.filter(expense => expense.date === today);
+                const totalExpenses = todayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+                
+                // Simple daily budget calculation (can be enhanced)
+                const dailyBudget = 50; // Default $50/day
+                const remaining = dailyBudget - totalExpenses;
+                
+                const remainingElement = document.getElementById('remainingAmount');
+                remainingElement.textContent = `$${remaining.toFixed(2)}`;
+                remainingElement.className = `budget-amount ${remaining >= 0 ? 'positive' : 'negative'}`;
+            });
+        }
+
+        // Affirmation functions
+        function addQuickAffirmation() {
+            const affirmation = prompt('Enter a positive affirmation:');
+            if (affirmation && affirmation.trim()) {
+                addAffirmationToList(affirmation.trim());
+            }
+        }
+
+        function generateAffirmation() {
+            const randomAffirmation = affirmationTemplates[Math.floor(Math.random() * affirmationTemplates.length)];
+            document.getElementById('generatedAffirmation').textContent = randomAffirmation;
+        }
+
+        function generateDailyAffirmation() {
+            generateAffirmation();
+            const affirmationText = document.getElementById('generatedAffirmation').textContent;
+            document.getElementById('todayAffirmation').textContent = affirmationText;
+        }
+
+        function addCustomAffirmation() {
+            const textarea = document.getElementById('customAffirmation');
+            const affirmation = textarea.value.trim();
+            if (affirmation) {
+                addAffirmationToList(affirmation);
+                textarea.value = '';
+            }
+        }
+
+        function addAffirmationToList(affirmationText) {
+            storage.get(['affirmations']).then(result => {
+                const affirmations = result.affirmations || [];
+                const newAffirmation = {
+                    id: Date.now(),
+                    text: affirmationText,
+                    date: new Date().toDateString()
+                };
+                affirmations.unshift(newAffirmation);
+                storage.set({affirmations: affirmations}).then(() => {
+                    loadAffirmations();
+                    showToast('Affirmation saved! ✨');
+                });
+            });
+        }
+
+        function loadAffirmations() {
+            storage.get(['affirmations']).then(result => {
+                const affirmations = result.affirmations || [];
+                
+                const affirmationsList = document.getElementById('affirmationsList');
+                if (affirmations.length === 0) {
+                    affirmationsList.innerHTML = '<div class="empty-state">Your affirmations will appear here</div>';
+                    return;
+                }
+
+                affirmationsList.innerHTML = affirmations.slice(0, 5).map(affirmation => `
+                    <div class="list-item">
+                        <span style="font-style: italic;">"${affirmation.text}"</span>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // Fitness functions
+        function addExercise() {
+            const name = document.getElementById('exerciseName').value.trim();
+            const duration = document.getElementById('exerciseDuration').value;
+            const reps = document.getElementById('exerciseReps').value.trim();
+            
+            if (name) {
+                addExerciseToList(name, duration, reps);
+                document.getElementById('exerciseName').value = '';
+                document.getElementById('exerciseDuration').value = '';
+                document.getElementById('exerciseReps').value = '';
+            }
+        }
+
+        function addExerciseToList(name, duration, reps) {
+            storage.get(['exercises']).then(result => {
+                const exercises = result.exercises || [];
+                const newExercise = {
+                    id: Date.now(),
+                    name: name,
+                    duration: duration,
+                    reps: reps,
+                    date: new Date().toDateString()
+                };
+                exercises.unshift(newExercise);
+                storage.set({exercises: exercises}).then(() => {
+                    loadExercises();
+                    showToast('Exercise logged! 💪');
+                });
+            });
+        }
+
+        function loadExercises() {
+            storage.get(['exercises']).then(result => {
+                const exercises = result.exercises || [];
+                const today = new Date().toDateString();
+                const todayExercises = exercises.filter(exercise => exercise.date === today);
+                
+                const exercisesList = document.getElementById('exercisesList');
+                if (todayExercises.length === 0) {
+                    exercisesList.innerHTML = '<div class="empty-state">No exercises logged today</div>';
+                    return;
+                }
+
+                exercisesList.innerHTML = todayExercises.map(exercise => `
+                    <div class="list-item">
+                        <span><strong>${exercise.name}</strong></span>
+                        <span>${exercise.duration ? exercise.duration + 'min' : ''} ${exercise.reps || ''}</span>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // Settings functions
+        function loadSettings() {
+            storage.get(['settings']).then(result => {
+                const settings = result.settings || {};
+                document.getElementById('notificationsEnabled').checked = settings.notifications !== false;
+                document.getElementById('syncEnabled').checked = settings.sync !== false;
+            });
+        }
+
+        function saveSettings() {
+            const settings = {
+                notifications: document.getElementById('notificationsEnabled').checked,
+                sync: document.getElementById('syncEnabled').checked
+            };
+            storage.set({settings: settings}).then(() => {
+                showToast('Settings saved! ⚙️');
+            });
+        }
+
+        function exportData() {
+            storage.get(null).then(data => {
+                const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'life-tracker-data.json';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('Data exported! 📦');
+            });
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                storage.set({
+                    tasks: [],
+                    expenses: [],
+                    affirmations: [],
+                    exercises: [],
+                    settings: {}
+                }).then(() => {
+                    loadAllData();
+                    updateBudgetWidget();
+                    showToast('All data cleared! 🗑️');
+                });
+            }
+        }
+
+        function updateTodaySchedule() {
+            // Placeholder for schedule functionality
+            document.getElementById('todaySchedule').textContent = 'No events scheduled for today';
+        }
+
+        function openFullApp() {
+            if (chrome && chrome.tabs) {
+                chrome.tabs.create({url: chrome.runtime.getURL('popup.html')});
+            } else {
+                window.open('../index.html', '_blank');
+            }
+        }
+
+        function showToast(message) {
+            // Simple toast notification
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #333;
+                color: white;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-size: 11px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        document.body.removeChild(toast);
+                    }
+                }, 300);
+            }, 2000);
+        }
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateY(100%); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateY(0); opacity: 1; }
+                to { transform: translateY(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize daily affirmation on load
+        generateDailyAffirmation();
+    </script>
+</body>
+</html>
