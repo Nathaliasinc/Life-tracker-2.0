@@ -11,27 +11,9 @@ workflows:
     trigger:
       branch: "main"
       
-    steps:
-      - name: "Generate Icons"
-        script: |
-          echo "🔧 Generating required Icon.png file..."
-          
-          # Create Resources directory
-          mkdir -p "Life Tracker 2.0/Resources"
-          
-          # Generate minimal valid PNG file
-          PNG_DATA="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-          echo "$PNG_DATA" | base64 -d > "Life Tracker 2.0/Resources/Icon.png"
-          
-          # Verify creation
-          if [ -f "Life Tracker 2.0/Resources/Icon.png" ]; then
-            echo "✅ Icon.png generated successfully"
-          else
-            echo "❌ Failed to generate Icon.png"
-            exit 1
-          fi
-          
+    steps:      
       - name: "Build Safari Extension"
         action: "build"
         platform: "iOS"
         scheme: "Life Tracker 2.0"
+        project: "Life Tracker 2.0.xcodeproj"
