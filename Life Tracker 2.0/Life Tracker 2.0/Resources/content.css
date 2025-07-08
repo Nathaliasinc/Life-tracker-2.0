@@ -1,0 +1,232 @@
+/* Life Tracker 2.0 - Content Script Styles */
+
+/* Extension indicator styles */
+#life-tracker-extension-indicator {
+    animation: lifeTrackerPulse 2s ease-in-out;
+}
+
+@keyframes lifeTrackerPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Floating widget styles */
+#life-tracker-floating-widget {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+#life-tracker-floating-widget * {
+    box-sizing: border-box !important;
+}
+
+#life-tracker-floating-widget button {
+    transition: all 0.2s ease !important;
+}
+
+#life-tracker-floating-widget button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+#life-tracker-floating-widget h3 {
+    line-height: 1.2 !important;
+}
+
+#life-tracker-floating-widget h4 {
+    line-height: 1.3 !important;
+}
+
+/* Quick dialog styles */
+.life-tracker-dialog-overlay {
+    backdrop-filter: blur(4px) !important;
+}
+
+.life-tracker-dialog {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+
+.life-tracker-dialog h3 {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+.life-tracker-dialog textarea {
+    font-family: inherit !important;
+    line-height: 1.4 !important;
+}
+
+.life-tracker-dialog button {
+    font-family: inherit !important;
+    font-weight: 500 !important;
+}
+
+/* Toast notification styles */
+.life-tracker-toast {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+    backdrop-filter: blur(10px) !important;
+    background: rgba(51, 51, 51, 0.95) !important;
+}
+
+/* Animation keyframes */
+@keyframes lifeTrackerSlideIn {
+    from {
+        transform: translateX(100%) !important;
+        opacity: 0 !important;
+    }
+    to {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+}
+
+@keyframes lifeTrackerSlideOut {
+    from {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+    to {
+        transform: translateX(100%) !important;
+        opacity: 0 !important;
+    }
+}
+
+@keyframes lifeTrackerFadeIn {
+    from {
+        opacity: 0 !important;
+        transform: translateY(20px) !important;
+    }
+    to {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+}
+
+@keyframes lifeTrackerFadeOut {
+    from {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    to {
+        opacity: 0 !important;
+        transform: translateY(20px) !important;
+    }
+}
+
+/* Ensure proper z-index stacking */
+#life-tracker-extension-indicator {
+    z-index: 999999 !important;
+}
+
+#life-tracker-floating-widget {
+    z-index: 999998 !important;
+}
+
+.life-tracker-dialog-overlay {
+    z-index: 999997 !important;
+}
+
+.life-tracker-toast {
+    z-index: 999996 !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+    #life-tracker-floating-widget {
+        width: 280px !important;
+        right: -290px !important;
+    }
+    
+    #life-tracker-floating-widget.visible {
+        right: 10px !important;
+    }
+    
+    .life-tracker-dialog {
+        width: 300px !important;
+        max-width: 95vw !important;
+        margin: 10px !important;
+    }
+    
+    .life-tracker-dialog textarea {
+        height: 60px !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .life-tracker-dialog {
+        background: #2d3748 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .life-tracker-dialog h3 {
+        color: #e2e8f0 !important;
+    }
+    
+    .life-tracker-dialog p {
+        color: #a0aec0 !important;
+    }
+    
+    .life-tracker-dialog textarea {
+        background: #4a5568 !important;
+        border-color: #718096 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .life-tracker-dialog button {
+        background: #4a5568 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .life-tracker-dialog button:last-child {
+        background: #667eea !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    #life-tracker-extension-indicator {
+        border: 3px solid white !important;
+        box-shadow: 0 0 0 1px black !important;
+    }
+    
+    #life-tracker-floating-widget {
+        border: 2px solid white !important;
+    }
+    
+    .life-tracker-dialog {
+        border: 2px solid black !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    #life-tracker-extension-indicator {
+        animation: none !important;
+    }
+    
+    #life-tracker-floating-widget {
+        transition: none !important;
+    }
+    
+    .life-tracker-dialog-overlay {
+        backdrop-filter: none !important;
+    }
+    
+    .life-tracker-toast {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Print styles - hide extension elements */
+@media print {
+    #life-tracker-extension-indicator,
+    #life-tracker-floating-widget,
+    .life-tracker-dialog-overlay,
+    .life-tracker-toast {
+        display: none !important;
+    }
+}

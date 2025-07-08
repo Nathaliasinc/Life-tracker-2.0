@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Life Tracker 2.0 Icon Generator - Apple Safari Compatible</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            color: #333;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 500;
+            text-align: center;
+        }
+        .status.loading {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .status.success {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+            transition: transform 0.2s ease;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .sizes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .size-item {
+            padding: 10px;
+            background: #f6f6f6;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .size-item.completed {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .preview canvas {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 Life Tracker 2.0 Icon Generator</h1>
+        <p class="subtitle">Apple Safari Web Extension Compatible</p>
+        
+        <div id="status" class="status loading">Ready to generate all extension icons...</div>
+        
+        <button id="generateBtn" class="generate-btn">🎨 Generate All Icons (14 files)</button>
+        
+        <div class="preview" id="preview" style="display: none;">
+            <h3>Preview:</h3>
+            <canvas id="previewCanvas" width="128" height="128"></canvas>
+        </div>
+        
+        <div class="sizes-grid" id="sizesGrid">
+            <!-- Will be populated by JavaScript -->
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instructions for Xcode Cloud:</h3>
+            <ol>
+                <li><strong>Generate Icons:</strong> Click the button above to download all 14 PNG files</li>
+                <li><strong>Locate Downloads:</strong> Find all downloaded <code>icon-*.png</code> files in your Downloads folder</li>
+                <li><strong>Copy to Extension:</strong> Move all PNG files to: <code>life-tracker-extension/Resources/icons/</code></li>
+                <li><strong>Add Main Icon:</strong> Copy <code>Icon.png</code> to: <code>life-tracker-extension/Resources/</code></li>
+                <li><strong>Commit to Git:</strong> Add all files to your repository and push to trigger Xcode Cloud build</li>
+                <li><strong>Build Success:</strong> Xcode Cloud will find all required icons and build successfully</li>
+            </ol>
+            
+            <h3>🔧 Git Commands:</h3>
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 10px; border-radius: 5px; overflow-x: auto;">
+git add life-tracker-extension/Resources/icons/*.png
+git add life-tracker-extension/Resources/Icon.png
+git commit -m "Add Life Tracker 2.0 extension icons"
+git push origin main</pre>
+        </div>
+    </div>
+
+    <script>
+        const sizes = [16, 32, 48, 64, 72, 96, 128, 144, 152, 192, 256, 384, 512];
+        
+        // Updated SVG for Life Tracker 2.0 branding
+        const svgContent = `<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f093fb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ee5a52;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" fill="url(#bgGradient)" rx="90"/>
+  
+  <!-- App framework -->
+  <rect x="40" y="60" width="432" height="392" fill="#ffffff" opacity="0.95" rx="20"/>
+  
+  <!-- Header bar -->
+  <rect x="40" y="60" width="432" height="60" fill="url(#bgGradient)" rx="20 20 0 0"/>
+  
+  <!-- Navigation dots -->
+  <circle cx="80" cy="90" r="6" fill="#ffffff" opacity="0.8"/>
+  <circle cx="105" cy="90" r="6" fill="#ffffff" opacity="0.6"/>
+  <circle cx="130" cy="90" r="6" fill="#ffffff" opacity="0.4"/>
+  
+  <!-- Life Tracker icon in header -->
+  <text x="256" y="100" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">Life Tracker 2.0</text>
+  
+  <!-- Content sections -->
+  <!-- Tasks section -->
+  <rect x="70" y="140" width="180" height="120" fill="#f8f9fa" rx="10"/>
+  <rect x="80" y="150" width="10" height="10" fill="url(#accentGradient)" rx="2"/>
+  <rect x="100" y="150" width="120" height="4" fill="#667eea" opacity="0.3" rx="2"/>
+  <rect x="80" y="170" width="10" height="10" fill="url(#accentGradient)" rx="2"/>
+  <rect x="100" y="170" width="140" height="4" fill="#667eea" opacity="0.3" rx="2"/>
+  <rect x="80" y="190" width="10" height="10" fill="#e9ecef" rx="2"/>
+  <rect x="100" y="190" width="100" height="4" fill="#e9ecef" rx="2"/>
+  
+  <!-- Budget section -->
+  <rect x="270" y="140" width="180" height="120" fill="#f8f9fa" rx="10"/>
+  <text x="360" y="170" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#28a745" text-anchor="middle">$</text>
+  <rect x="290" y="190" width="140" height="8" fill="#28a745" opacity="0.2" rx="4"/>
+  <rect x="290" y="210" width="100" height="6" fill="#28a745" opacity="0.3" rx="3"/>
+  
+  <!-- Affirmations section -->
+  <rect x="70" y="280" width="180" height="120" fill="#f8f9fa" rx="10"/>
+  <circle cx="160" cy="330" r="25" fill="url(#accentGradient)" opacity="0.8"/>
+  <text x="160" y="340" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">✨</text>
+  
+  <!-- Fitness section -->
+  <rect x="270" y="280" width="180" height="120" fill="#f8f9fa" rx="10"/>
+  <circle cx="360" cy="330" r="25" fill="#667eea"/>
+  <text x="360" y="340" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">💪</text>
+  
+  <!-- Bottom brand -->
+  <text x="256" y="480" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#667eea" text-anchor="middle">Your Life, Organized</text>
+</svg>`;
+
+        // Initialize size grid
+        function initializeSizesGrid() {
+            const sizesGrid = document.getElementById('sizesGrid');
+            
+            // Add regular icon sizes
+            sizes.forEach(size => {
+                const item = document.createElement('div');
+                item.className = 'size-item';
+                item.id = `size-${size}`;
+                item.textContent = `${size}×${size}px`;
+                sizesGrid.appendChild(item);
+            });
+            
+            // Add main Icon.png entry
+            const mainItem = document.createElement('div');
+            mainItem.className = 'size-item';
+            mainItem.id = 'size-main';
+            mainItem.textContent = 'Icon.png (1024×1024)';
+            sizesGrid.appendChild(mainItem);
+        }
+
+        // Generate preview
+        function generatePreview() {
+            const canvas = document.getElementById('previewCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            img.onload = function() {
+                ctx.clearRect(0, 0, 128, 128);
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, 128, 128);
+                document.getElementById('preview').style.display = 'block';
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
+        }
+
+        async function generateIcons() {
+            const statusDiv = document.getElementById('status');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            generateBtn.disabled = true;
+            statusDiv.className = 'status loading';
+            statusDiv.innerHTML = 'Generating Life Tracker 2.0 icons...';
+            
+            try {
+                // Check if browser supports downloads
+                if (!document.createElement('a').download !== undefined) {
+                    throw new Error('Browser does not support automatic downloads');
+                }
+                
+                // Allow user interaction to prevent popup blocking
+                await new Promise(resolve => {
+                    setTimeout(resolve, 500);
+                });
+                
+                // Generate all regular sizes with user-friendly delays
+                for (let i = 0; i < sizes.length; i++) {
+                    const size = sizes[i];
+                    statusDiv.innerHTML = `Generating icon ${i + 1}/${sizes.length + 1} (${size}×${size}px)... <br><small>Please allow downloads when prompted by your browser</small>`;
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    
+                    const img = new Image();
+                    await new Promise((resolve, reject) => {
+                        img.onload = resolve;
+                        img.onerror = reject;
+                        img.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
+                    });
+                    
+                    // Enable smooth scaling for better quality
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    // Create download with better browser compatibility
+                    try {
+                        const dataUrl = canvas.toDataURL('image/png', 1.0);
+                        const link = document.createElement('a');
+                        link.download = `icon-${size}.png`;
+                        link.href = dataUrl;
+                        link.style.display = 'none';
+                        
+                        // Add to DOM, click, and remove
+                        document.body.appendChild(link);
+                        link.click();
+                        
+                        // Cleanup after delay
+                        setTimeout(() => {
+                            if (document.body.contains(link)) {
+                                document.body.removeChild(link);
+                            }
+                        }, 1000);
+                        
+                        // Mark as completed
+                        const sizeItem = document.getElementById(`size-${size}`);
+                        sizeItem.className = 'size-item completed';
+                        sizeItem.textContent = `${size}×${size}px ✓`;
+                        
+                    } catch (downloadError) {
+                        console.error(`Failed to download icon-${size}.png:`, downloadError);
+                        // Fallback: show the image for manual save
+                        showManualDownload(canvas, `icon-${size}.png`);
+                    }
+                    
+                    // Longer delay to prevent browser blocking
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                }
+                
+                // Generate main Icon.png for Xcode (1024×1024)
+                statusDiv.innerHTML = `Generating main Icon.png for Xcode Cloud... <br><small>This is the most important file!</small>`;
+                
+                const mainCanvas = document.createElement('canvas');
+                mainCanvas.width = 1024;
+                mainCanvas.height = 1024;
+                const mainCtx = mainCanvas.getContext('2d');
+                
+                const mainImg = new Image();
+                await new Promise((resolve, reject) => {
+                    mainImg.onload = resolve;
+                    mainImg.onerror = reject;
+                    mainImg.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
+                });
+                
+                mainCtx.imageSmoothingEnabled = true;
+                mainCtx.imageSmoothingQuality = 'high';
+                mainCtx.drawImage(mainImg, 0, 0, 1024, 1024);
+                
+                // Try to download main icon
+                try {
+                    const mainDataUrl = mainCanvas.toDataURL('image/png', 1.0);
+                    const mainLink = document.createElement('a');
+                    mainLink.download = 'Icon.png';
+                    mainLink.href = mainDataUrl;
+                    mainLink.style.display = 'none';
+                    document.body.appendChild(mainLink);
+                    mainLink.click();
+                    
+                    setTimeout(() => {
+                        if (document.body.contains(mainLink)) {
+                            document.body.removeChild(mainLink);
+                        }
+                    }, 1000);
+                    
+                    // Mark main icon as completed
+                    const mainItem = document.getElementById('size-main');
+                    mainItem.className = 'size-item completed';
+                    mainItem.textContent = 'Icon.png (1024×1024) ✓';
+                    
+                } catch (mainDownloadError) {
+                    console.error('Failed to download main Icon.png:', mainDownloadError);
+                    showManualDownload(mainCanvas, 'Icon.png');
+                }
+                
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '🎉 All icons generated! <br><small>Check your Downloads folder, or right-click images below to save manually if downloads didn\'t work.</small>';
+                
+            } catch (error) {
+                console.error('Error generating icons:', error);
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `❌ Error generating icons: ${error.message}<br><small>Try the manual method below or check browser permissions.</small>`;
+                showFallbackMethod();
+            }
+            
+            generateBtn.disabled = false;
+        }
+        
+        // Fallback function to show images for manual download
+        function showManualDownload(canvas, filename) {
+            const container = document.getElementById('manualDownloads') || createManualDownloadContainer();
+            
+            const div = document.createElement('div');
+            div.style.cssText = 'margin: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; text-align: center;';
+            
+            const img = document.createElement('img');
+            img.src = canvas.toDataURL('image/png');
+            img.style.cssText = 'max-width: 64px; max-height: 64px; display: block; margin: 5px auto;';
+            
+            const label = document.createElement('p');
+            label.textContent = `Right-click and save as: ${filename}`;
+            label.style.cssText = 'margin: 5px 0; font-size: 12px; color: #666;';
+            
+            div.appendChild(img);
+            div.appendChild(label);
+            container.appendChild(div);
+        }
+        
+        function createManualDownloadContainer() {
+            const container = document.createElement('div');
+            container.id = 'manualDownloads';
+            container.innerHTML = '<h3>Manual Download (Right-click to save):</h3>';
+            container.style.cssText = 'margin-top: 20px; padding: 20px; background: #f5f5f5; border-radius: 10px;';
+            document.querySelector('.container').appendChild(container);
+            return container;
+        }
+        
+        function showFallbackMethod() {
+            const fallback = document.createElement('div');
+            fallback.innerHTML = `
+                <h3>🔧 Alternative Methods:</h3>
+                <p><strong>Method 1:</strong> Try a different browser (Chrome, Firefox, Edge)</p>
+                <p><strong>Method 2:</strong> Enable downloads in browser settings</p>
+                <p><strong>Method 3:</strong> Use the manual script method below</p>
+                <pre style="background: #2d3748; color: #e2e8f0; padding: 10px; border-radius: 5px; font-size: 12px;">
+# Run this PowerShell command in your project folder:
+copy NUL "life-tracker-extension\\Resources\\Icon.png"
+# Then replace it with any 512x512 PNG image</pre>
+            `;
+            fallback.style.cssText = 'margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;';
+            document.querySelector('.container').appendChild(fallback);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSizesGrid();
+            generatePreview();
+            document.getElementById('generateBtn').addEventListener('click', generateIcons);
+        });
+    </script>
+</body>
+</html>
